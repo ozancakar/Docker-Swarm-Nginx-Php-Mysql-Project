@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role == worker
+    ports:
+      - "80:80"
+    networks:
+      - nginx_network
+      - shared_network
+    volumes:
+      - ./html:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - php
+
+  php:
+    image: php:7.4-fpm
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role == worker
+    networks:
+      - nginx_network
+      - shared_network
+    volumes:
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - mysql
+    command: >
+      sh -c "docker-php-ext-install mysqli &&
+             docker-php-ext-enable mysqli &&
+             php-fpm"
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+    networks:
+      - mysql_network
+      - shared_network
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8080:80"
+    networks:
+      - shared_network
+    depends_on:
+      - mysql
+
+networks:
+  shared_network:
+    driver: overlay
+  nginx_network:
+    driver: overlay
+  mysql_network:
+    driver: overlay
+
+volumes:
+  mysql_data:
+    driver: local
