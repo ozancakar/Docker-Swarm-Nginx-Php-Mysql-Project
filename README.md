@@ -74,6 +74,8 @@ Bu depo, Docker Swarm kullanarak tam işlevsel bir web yığının dağıtımı 
     MYSQL_PASSWORD: password
   ```
 
+  ** !!! Environment kısmı için .env dosyası oluşturup parola ve önemli bilgileri burda saklamanız en doğrusu olucaktır bu proje basit bir örnek ve öğretim amcacı taşıdığından dolayı bu tarz bir yol izlenmemiştir.
+
 - **Volumes (Hacimler):**
   `html/`, `nginx.conf` ve `my.cnf` dosyalarının var olduğundan ve workerların ana dizininde bulunduğundan emin olun.
 
