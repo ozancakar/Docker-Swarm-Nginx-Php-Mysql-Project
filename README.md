@@ -42,6 +42,9 @@ Bu depo, Docker Swarm kullanarak tam işlevsel bir web yığının dağıtımı 
    docker service ls
    ```
 
+   ![Docker Node Listesi](images/node_ls.png)
+
+
 
 
 1. Web uygulamasına erişim:
@@ -89,11 +92,16 @@ Stack durumunu takip etmek için kullanabileceğiniz komutlar:
   docker node ls
   ```
 
+  ![Docker Node Listesi](images/node_ls.png)
+
 - Çalışan servisleri görüntüleyin:
 
   ```bash
   docker service ls
   ```
+
+  ![Docker Servis Durumu](images/service_ls.png)
+
 
 ## Temizlik
 
